@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import * as SplashScreen from 'expo-splash-screen';
+import AppLoading from 'expo-app-loading';
 import { 
   useFonts, 
   Inter_400Regular ,
@@ -19,8 +19,6 @@ import { Home } from "./src/screens/Home";
 
 import theme from "./src/styles/theme";
 
-SplashScreen.preventAutoHideAsync();
-
 
 export function App (){
 
@@ -32,15 +30,11 @@ export function App (){
     Archivo_600SemiBold
   });
 
-  async function hideSplashScreen(){
-    if(fontsLoaded){
-      await SplashScreen.hideAsync();
-    }
+  if (!fontsLoaded) {
+    return (
+      <AppLoading />
+    )
   }
-
-  useEffect(() => {
-    hideSplashScreen();
-  }, [fontsLoaded])
 
   return(
     <ThemeProvider theme={theme}>
