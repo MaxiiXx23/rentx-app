@@ -11,7 +11,8 @@ import {
   Container,
   Header,
   HeaderContent,
-  TotalCars
+  TotalCars,
+  CarLit
 } from './styles';
 
 export function Home() {
@@ -20,17 +21,8 @@ export function Home() {
     brand: 'Audi',
     name: 'RS 5 Coupé',
     rent: {
-        period: 'Ao Dia',
-        price: 120,
-    },
-    thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
-  }
-  const carDataTwo = {
-    brand: 'Porsche',
-    name: 'Panamera',
-    rent: {
-        period: 'Ao Dia',
-        price: 340,
+      period: 'Ao Dia',
+      price: 120,
     },
     thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
   }
@@ -53,11 +45,15 @@ export function Home() {
           </TotalCars>
         </HeaderContent>
       </Header>
-      <Car 
-        data={carDataOne}
-      />
-      <Car 
-        data={carDataTwo}
+      <CarLit
+        data={[1, 2, 3,4 ,5, 6, 7]}
+        keyExtractor={item => String(item)}
+        renderItem={({ item }) =>
+          <Car
+            data={carDataOne}
+          />
+        }
+
       />
     </Container>
   );

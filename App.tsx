@@ -1,11 +1,12 @@
-import React, {useEffect} from "react";
+import React from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AppLoading from 'expo-app-loading';
-import { 
-  useFonts, 
-  Inter_400Regular ,
+import {
+  useFonts,
+  Inter_400Regular,
   Inter_500Medium
 } from '@expo-google-fonts/inter';
-import { 
+import {
   Archivo_400Regular,
   Archivo_500Medium,
   Archivo_600SemiBold
@@ -15,12 +16,12 @@ import { ThemeProvider } from "styled-components";
 
 
 
-import { Home } from "./src/screens/Home";
+import { CarDetails } from "./src/screens/CarDetails";
 
 import theme from "./src/styles/theme";
 
 
-export function App (){
+export function App() {
 
   let [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -36,9 +37,12 @@ export function App (){
     )
   }
 
-  return(
+  return (
     <ThemeProvider theme={theme}>
-      <Home />
+      <GestureHandlerRootView style={{flex: 1}}>
+        <CarDetails />
+      </GestureHandlerRootView>
+
     </ThemeProvider>
   )
 }
