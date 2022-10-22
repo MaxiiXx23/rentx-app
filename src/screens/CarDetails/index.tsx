@@ -1,7 +1,16 @@
 import React from 'react';
 
+import { Acessory } from '../../components/Acessory';
 import { BackButton } from '../../components/BackButton';
 import { ImageSlider } from '../../components/ImageSlider';
+
+import SpeedSvg from "../../assets/speed.svg";
+import AccelerationSvg from "../../assets/acceleration.svg";
+import ForceSvg from "../../assets/force.svg";
+import GasolineSvg from "../../assets/gasoline.svg";
+import ExchanceSvg from "../../assets/exchange.svg";
+import PeopleSvg from "../../assets/people.svg";
+
 
 import {
   Container,
@@ -15,6 +24,7 @@ import {
   Rent,
   Period,
   Price,
+  Acessories,
   About
 } from './styles';
 
@@ -47,6 +57,15 @@ export function CarDetails() {
             <Price>R$ 580</Price>
           </Rent>
         </Details>
+
+        <Acessories>
+          <Acessory name='380km/h' icon={SpeedSvg}/>
+          <Acessory name='3.2s' icon={AccelerationSvg}/>
+          <Acessory name='800 HP' icon={ForceSvg}/>
+          <Acessory name='Gasolina' icon={GasolineSvg}/>
+          <Acessory name='Auto' icon={ExchanceSvg}/>
+          <Acessory name='2 pessoas' icon={PeopleSvg}/>
+        </Acessories>
 
         <About>
           Este é automóvel desportivo.
