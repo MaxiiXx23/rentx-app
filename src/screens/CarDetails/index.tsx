@@ -25,8 +25,10 @@ import {
   Period,
   Price,
   Acessories,
-  About
+  About,
+  Footer
 } from './styles';
+import { Button } from '../../components/Button';
 
 export function CarDetails() {
 
@@ -74,6 +76,10 @@ export function CarDetails() {
         </About>
       </Content>
 
+      <Footer>
+        <Button title='Escolher período do aluguel' />
+      </Footer>
+    
     </Container>
   );
 }
