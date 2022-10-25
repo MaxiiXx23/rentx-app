@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StatusBar } from 'react-native';
 
@@ -17,6 +18,8 @@ import {
 
 export function Home() {
 
+  const navigation = useNavigation<any>();
+
   const carDataOne = {
     brand: 'Audi',
     name: 'RS 5 Coupé',
@@ -25,6 +28,10 @@ export function Home() {
       price: 120,
     },
     thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
+  }
+
+  function handleCarDetails(){
+    navigation.navigate('CarDetails');
   }
 
   return (
@@ -51,6 +58,7 @@ export function Home() {
         renderItem={({ item }) =>
           <Car
             data={carDataOne}
+            onPress={handleCarDetails}
           />
         }
 

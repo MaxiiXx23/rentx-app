@@ -19,10 +19,17 @@ import { useTheme } from 'styled-components';
 import { BackButton } from '../../components/BackButton';
 import { Button } from '../../components/Button';
 import { Calendar } from '../../components/Calendar';
+import { useNavigation } from '@react-navigation/native';
 
 
 export function Scheduling() {
     const theme = useTheme();
+    const navigation = useNavigation<any>();
+
+    function handleSchedulingDetails(){
+        navigation.navigate('SchedulingDetails')
+    }
+
     return (
         <Container>
             <StatusBar
@@ -31,7 +38,11 @@ export function Scheduling() {
                 translucent
             />
             <Header>
-                <BackButton onPress={() => { }} color={theme.colors.shape} />
+                <BackButton 
+                    onPress={() => 
+                        navigation.goBack()
+                    }
+                color={theme.colors.shape} />
                 <Title>
                     Escolha uma {'\n'}
                     data de início e {'\n'}
@@ -64,7 +75,10 @@ export function Scheduling() {
             </Content>
 
             <Footer>
-                <Button title='Confimar'/>
+                <Button 
+                    title='Confimar'
+                    onPress={handleSchedulingDetails}
+                />
             </Footer>
         </Container>
     );

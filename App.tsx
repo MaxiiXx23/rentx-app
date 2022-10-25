@@ -16,7 +16,7 @@ import { ThemeProvider } from "styled-components";
 
 
 
-import { SchedulingComplete } from "./src/screens/SchedulingComplete";
+import { Routes } from "./src/routes";
 
 import theme from "./src/styles/theme";
 
@@ -40,7 +40,7 @@ export function App() {
   return (
     <ThemeProvider theme={theme}>
       <GestureHandlerRootView style={{flex: 1}}>
-        <SchedulingComplete />
+        <Routes />
       </GestureHandlerRootView>
 
     </ThemeProvider>

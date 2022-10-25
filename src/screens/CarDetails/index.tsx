@@ -1,4 +1,7 @@
 import React from 'react';
+import { StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from 'styled-components';
 
 import { Acessory } from '../../components/Acessory';
 import { BackButton } from '../../components/BackButton';
@@ -30,15 +33,26 @@ import {
 } from './styles';
 import { Button } from '../../components/Button';
 
+
 export function CarDetails() {
+
+  const theme = useTheme();
+  const navigation = useNavigation<any>();
+
+  function handleScheduling(){
+    navigation.navigate('Scheduling');
+  }
 
   return (
     <Container>
+      <StatusBar 
+        barStyle='dark-content'
+        backgroundColor={theme.colors.background_secondary}
+        translucent
+      />
       <Header>
         <BackButton
-          onPress={() => {
-            console.log('TESTE');
-          }}
+          onPress={() => navigation.goBack()}
         />
       </Header>
 
@@ -77,7 +91,10 @@ export function CarDetails() {
       </Content>
 
       <Footer>
-        <Button title='Escolher período do aluguel' />
+        <Button 
+          title='Escolher período do aluguel'
+          onPress={handleScheduling}
+        />
       </Footer>
     
     </Container>

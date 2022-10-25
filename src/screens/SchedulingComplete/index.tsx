@@ -13,11 +13,17 @@ import {
 import LogoSvg from "../../assets/logo_background_gray.svg";
 import DoneSvg from "../../assets/done.svg";
 import { ConfirmeButton } from '../../components/ConfirmeButton';
+import { useNavigation } from '@react-navigation/native';
 
 
 export function SchedulingComplete() {
 
     const { width } = useWindowDimensions();
+    const navigation = useNavigation<any>();
+
+    function handleConfirmeOk(){
+        navigation.navigate('Home')
+    }
 
     return (
         <Container>
@@ -37,7 +43,10 @@ export function SchedulingComplete() {
                 </Message>
             </Content>
             <Footer>
-                <ConfirmeButton title='OK' />
+                <ConfirmeButton 
+                    title='OK'
+                    onPress={handleConfirmeOk}
+                />
             </Footer>
         </Container>
     );

@@ -41,18 +41,28 @@ import {
   Footer,
 } from './styles';
 import { Button } from '../../components/Button';
+import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'react-native';
 
 export function SchedulingDetails() {
 
   const theme = useTheme();
+  const navigation = useNavigation<any>();
+
+  function handleConfirmeRental(){
+    navigation.navigate('SchedulingComplete');
+  }
 
   return (
     <Container>
+      <StatusBar 
+        barStyle='dark-content'
+        backgroundColor={theme.colors.background_secondary}
+        translucent
+      />
       <Header>
         <BackButton
-          onPress={() => {
-            console.log('TESTE');
-          }}
+          onPress={() => navigation.goBack()}
         />
       </Header>
 
@@ -122,7 +132,11 @@ export function SchedulingDetails() {
 
 
       <Footer>
-        <Button title='Escolher período do aluguel' />
+        <Button 
+          title='Confirmar Agora'
+          color={theme.colors.success} 
+          onPress={handleConfirmeRental}
+        />
       </Footer>
 
     </Container>
