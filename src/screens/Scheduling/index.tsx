@@ -1,7 +1,6 @@
 import React from 'react';
+import { StatusBar } from 'react-native';
 
-import { useTheme } from 'styled-components';
-import { BackButton } from '../../components/BackButton';
 import {
     Container,
     Header,
@@ -15,8 +14,12 @@ import {
 } from './styles';
 
 import ArrowSvg from "../../assets/arrow.svg";
-import { StatusBar } from 'react-native';
+
+import { useTheme } from 'styled-components';
+import { BackButton } from '../../components/BackButton';
 import { Button } from '../../components/Button';
+import { Calendar } from '../../components/Calendar';
+
 
 export function Scheduling() {
     const theme = useTheme();
@@ -57,7 +60,7 @@ export function Scheduling() {
             </Header>
 
             <Content>
-
+                <Calendar />
             </Content>
 
             <Footer>

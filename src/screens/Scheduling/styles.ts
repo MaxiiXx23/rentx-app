@@ -16,7 +16,6 @@ export const Header = styled.View`
     height: 325px;
     background-color: ${({ theme }) => theme.colors.header};
     justify-content: center;
-    position: absolute;
     padding: 25px;
     margin-top: ${getStatusBarHeight()}px;
 `;
