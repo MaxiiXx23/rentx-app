@@ -16,7 +16,7 @@ import { ThemeProvider } from "styled-components";
 
 
 
-import { Scheduling } from "./src/screens/Scheduling";
+import { SchedulingDetails } from "./src/screens/SchedulingDetails";
 
 import theme from "./src/styles/theme";
 
@@ -40,7 +40,7 @@ export function App() {
   return (
     <ThemeProvider theme={theme}>
       <GestureHandlerRootView style={{flex: 1}}>
-        <Scheduling />
+        <SchedulingDetails />
       </GestureHandlerRootView>
 
     </ThemeProvider>
