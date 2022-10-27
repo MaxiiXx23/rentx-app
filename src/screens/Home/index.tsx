@@ -21,6 +21,8 @@ import {
 
 export function Home() {
 
+  const navigation = useNavigation<any>();
+
   const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -35,25 +37,15 @@ export function Home() {
     }
   }
 
+  function handleCarDetails(car: CarDTO) {
+    navigation.navigate('CarDetails', {
+      car
+    });
+  }
+
   useEffect(() => {
     fecthCars();
   }, [])
-
-  const navigation = useNavigation<any>();
-
-  const carDataOne = {
-    brand: 'Audi',
-    name: 'RS 5 Coupé',
-    rent: {
-      period: 'Ao Dia',
-      price: 120,
-    },
-    thumbnail: 'https://reactnative.dev/img/tiny_logo.png',
-  }
-
-  function handleCarDetails() {
-    navigation.navigate('CarDetails');
-  }
 
   return (
     <Container>
@@ -81,7 +73,7 @@ export function Home() {
             renderItem={({ item }) =>
               <Car
                 data={item}
-                onPress={handleCarDetails}
+                onPress={() => handleCarDetails(item)}
               />
             }
           />
