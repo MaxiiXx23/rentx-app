@@ -54,5 +54,5 @@ buck-out/
 web-build/
 dist/
 
-# env
+# env variavel
 .env
