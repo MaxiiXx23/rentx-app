@@ -41,7 +41,9 @@ export function CarDetails() {
   const { car } = route.params as Params;
 
   function handleScheduling(){
-    navigation.navigate('Scheduling');
+    navigation.navigate('Scheduling', {
+      car
+    });
   }
 
   return (
@@ -71,7 +73,7 @@ export function CarDetails() {
           </Description>
           <Rent>
             <Period>{car.rent.period}</Period>
-            <Price>R$ ${car.rent.price}</Price>
+            <Price>R$ {car.rent.price}</Price>
           </Rent>
         </Details>
 
