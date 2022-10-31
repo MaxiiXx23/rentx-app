@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { FlatListProps } from 'react-native';
 // a tipagem também deve ser passada ao component flatlist
 import { CarDTO } from '../../dtos/CarDTO';
+import { RectButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
   flex: 1;
@@ -36,4 +37,16 @@ export const CarLit =  styled(FlatList as new (props: FlatListProps<CarDTO>) => 
   showsVerticalScrollIndicator: false,
 })`
   
+`;
+
+export const MyCarsButton = styled(RectButton)`
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({theme}) => theme.colors.main};
+  position: absolute;
+  bottom: 13px;
+  right: 22px;
 `;

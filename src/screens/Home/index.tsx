@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from 'styled-components';
 import { StatusBar } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { Ionicons } from "@expo/vector-icons";
 
 import { api } from '../../services/api';
 import { CarDTO } from '../../dtos/CarDTO';
@@ -16,12 +18,14 @@ import {
   Header,
   HeaderContent,
   TotalCars,
-  CarLit
+  CarLit, 
+  MyCarsButton
 } from './styles';
 
 export function Home() {
 
   const navigation = useNavigation<any>();
+  const theme = useTheme();
 
   const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +45,10 @@ export function Home() {
     navigation.navigate('CarDetails', {
       car
     });
+  }
+
+  function handleOpenMyCars() {
+    navigation.navigate('MyCars');
   }
 
   useEffect(() => {
@@ -78,6 +86,13 @@ export function Home() {
             }
           />
       }
+      <MyCarsButton onPress={handleOpenMyCars}>
+        <Ionicons 
+          name='car-sport'
+          size={RFValue(32)}
+          color={theme.colors.shape}
+          />
+      </MyCarsButton>
     </Container>
   );
 }
