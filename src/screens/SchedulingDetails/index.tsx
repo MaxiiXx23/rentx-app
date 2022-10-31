@@ -62,7 +62,7 @@ interface Params {
 
 export function SchedulingDetails() {
   const [rentalPeriods, setRentalPeriods] = useState<RentalPeriodProps>({} as RentalPeriodProps);
-
+  const [isLoading, setIsLoading] = useState(false);
 
   const theme = useTheme();
   const route = useRoute();
@@ -71,34 +71,47 @@ export function SchedulingDetails() {
 
   const rentalTotal = Number(dates.length * car.rent.price)
 
-  async function handleConfirmeRental(){
+  async function handleConfirmeRental() {
+    setIsLoading(true);
+
     const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
 
     const unavailable_dates = [
       ...schedulesByCar.data.unavailable_dates,
       ...dates,
-    ]
+    ];
+
+    await api.post('/schedules_byuser', {
+      user_id: 1,
+      car,
+      startDate: format(getPlataformDate(new Date(dates[0])), 'dd/MM/yyyy'),
+      endDate: format(getPlataformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy')
+    })
 
     api.put(`/schedules_bycars/${car.id}`, {
       id: car.id,
       unavailable_dates
     })
-    .then( () => navigation.navigate('SchedulingComplete'))
-    .catch(() => Alert.alert("Não foi possível confirmar o agendamento."))
+      .then(() => navigation.navigate('SchedulingComplete'))
+      .catch(() => {
+        setIsLoading(false);
+        Alert.alert("Não foi possível confirmar o agendamento.");
+      });
+
   }
 
   useEffect(() => {
 
     setRentalPeriods({
       start: format(getPlataformDate(new Date(dates[0])), 'dd/MM/yyyy'),
-      end: format(getPlataformDate(new Date(dates[dates.length -1])), 'dd/MM/yyyy')
+      end: format(getPlataformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy')
     })
 
-  },[])
+  }, [])
 
   return (
     <Container>
-      <StatusBar 
+      <StatusBar
         barStyle='dark-content'
         backgroundColor={theme.colors.background_secondary}
         translucent
@@ -131,7 +144,7 @@ export function SchedulingDetails() {
           {
             car.accessories.map(accessory => (
               <Accessory
-                key={accessory.type}  
+                key={accessory.type}
                 name={accessory.name}
                 icon={getAccessoryIcon(accessory.type)}
               />
@@ -179,10 +192,12 @@ export function SchedulingDetails() {
 
 
       <Footer>
-        <Button 
+        <Button
           title='Confirmar Agora'
-          color={theme.colors.success} 
+          color={theme.colors.success}
           onPress={handleConfirmeRental}
+          enabled={!isLoading}
+          loading={isLoading}
         />
       </Footer>
 

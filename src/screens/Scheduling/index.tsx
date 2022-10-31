@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 
 import {
     Container,
@@ -34,7 +34,7 @@ interface RentalPeriod {
 
 interface Params {
     car: CarDTO;
-  }
+}
 
 export function Scheduling() {
     const [lastSelectedDate, setLastSelectedDate] = useState<DayProps>({} as DayProps);
@@ -43,21 +43,16 @@ export function Scheduling() {
 
     const theme = useTheme();
     const route = useRoute();
-    const { car } = route.params as Params; 
+    const { car } = route.params as Params;
     const navigation = useNavigation<any>();
 
     function handleSchedulingDetails() {
-        if(!rentalPeriod.start || !rentalPeriod.end){
-            Alert.alert(
-                "Data de aluguel não selecionada", 
-                "Por favor selecione uma data.")
-        }else{
-            navigation.navigate('SchedulingDetails', {
-                car,
-                dates: Object.keys(markedDates)
-            })
-        }
-        
+
+        navigation.navigate('SchedulingDetails', {
+            car,
+            dates: Object.keys(markedDates)
+        })
+
     }
 
     function handleChangeDate(date: DayProps) {
@@ -75,7 +70,7 @@ export function Scheduling() {
         setMarkedDates(interval);
 
         const firstDate = Object.keys(interval)[0];
-        const endDate = Object.keys(interval)[Object.keys(interval).length -1];
+        const endDate = Object.keys(interval)[Object.keys(interval).length - 1];
 
         setRentalPeriod({
             start: start.timestamp,
@@ -137,6 +132,7 @@ export function Scheduling() {
                 <Button
                     title='Confimar'
                     onPress={handleSchedulingDetails}
+                    enabled={!!rentalPeriod.start}
                 />
             </Footer>
         </Container>
