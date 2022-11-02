@@ -9,38 +9,48 @@ import { Scheduling } from "../screens/Scheduling";
 import { SchedulingDetails } from "../screens/SchedulingDetails";
 import { SchedulingComplete } from "../screens/SchedulingComplete";
 import { MyCars } from "../screens/MyCars";
+import { Splash } from "../screens/splash";
 
 
 export function StackRoutes() {
     return (
-        <Navigator  screenOptions={{
-            headerShown: false,
-        }} >
-            <Screen 
+        <Navigator
+            screenOptions={{
+                headerShown: false,
+            }}
+            initialRouteName="Splash"
+        >
+
+            <Screen
+                name="Splash"
+                component={Splash}
+            />
+
+            <Screen
                 name="Home"
                 component={Home}
-             />
+            />
 
-            <Screen 
+            <Screen
                 name="CarDetails"
                 component={CarDetails}
-             />
+            />
 
-            <Screen 
+            <Screen
                 name="Scheduling"
                 component={Scheduling}
-             />
+            />
 
-            <Screen 
+            <Screen
                 name="SchedulingDetails"
                 component={SchedulingDetails}
-             />
+            />
 
-            <Screen 
+            <Screen
                 name="SchedulingComplete"
                 component={SchedulingComplete}
-             />
-             
+            />
+
             <Screen
                 name="MyCars"
                 component={MyCars}
