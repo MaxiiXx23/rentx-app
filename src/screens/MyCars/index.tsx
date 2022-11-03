@@ -26,7 +26,7 @@ import {
 } from './styles';
 
 import { Car } from '../../components/Car';
-import { Loading } from '../../components/Loading';
+import { LoadAnimated } from '../../components/LoadAnimated';
 
 interface CarProps {
   id: string;
@@ -87,7 +87,7 @@ export function MyCars() {
 
       </Header>
 
-      {isLoading ? <Loading /> :
+      {isLoading ? <LoadAnimated /> :
         <Content>
 
           <Appointments>

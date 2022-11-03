@@ -96,19 +96,19 @@ export function CarDetails() {
       />
       <Animated.View
         style={[
-          headerStyleAnimation, 
+          headerStyleAnimation,
           styles.header,
-          {backgroundColor: theme.colors.background_secondary}
+          { backgroundColor: theme.colors.background_secondary }
         ]}
       >
-        <Header>
-          <BackButton
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          />
-        </Header>
 
         <Animated.View style={[sliderCarsStyleAnimation]}>
+          <Header>
+            <BackButton
+              onPress={() => navigation.goBack()}
+              
+            />
+          </Header>
           <CarImages>
             <ImageSlider
               imagesUrl={car.photos}
@@ -151,15 +151,6 @@ export function CarDetails() {
 
         <About>
           {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
-          {car.about}
         </About>
       </Animated.ScrollView>
 
@@ -180,8 +171,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     overflow: 'hidden',
     zIndex: 1,
-  },
-  backButton: {
-    top: 50
   }
 })

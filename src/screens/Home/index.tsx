@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar, StyleSheet, BackHandler } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Ionicons } from "@expo/vector-icons";
@@ -22,7 +22,7 @@ import { CarDTO } from '../../dtos/CarDTO';
 import Logo from "../../assets/logo.svg";
 
 import { Car } from "../../components/Car"
-import { Loading } from '../../components/Loading';
+import { LoadAnimated } from '../../components/LoadAnimated';
 
 import {
   Container,
@@ -90,15 +90,18 @@ export function Home() {
     navigation.navigate('MyCars');
   }
 
-  useEffect(() => {
-    fecthCars();
-  }, [])
+  function onBackPress (){
+    navigation.goBack();
+  }
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      return true;
-    })
-  })
+  useFocusEffect(() => {
+    fecthCars();
+    const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => true
+    );
+    return () => backHandler.remove();
+});
 
   return (
     <Container>
@@ -119,7 +122,7 @@ export function Home() {
         </HeaderContent>
       </Header>
       {
-        loading ? <Loading />
+        loading ? <LoadAnimated />
           : <CarLit
             data={cars}
             keyExtractor={item => item.id}
