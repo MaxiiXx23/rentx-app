@@ -1,7 +1,17 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
+
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+
+import Animated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  interpolate,
+  Extrapolate
+} from 'react-native-reanimated';
 
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
@@ -13,7 +23,6 @@ import {
   Container,
   Header,
   CarImages,
-  Content,
   Details,
   Description,
   Brand,
@@ -28,6 +37,8 @@ import {
 import { Button } from '../../components/Button';
 import { CarDTO } from '../../dtos/CarDTO';
 
+
+
 // interface criada para tirar os params recebidos pela rota
 interface Params {
   car: CarDTO;
@@ -35,12 +46,42 @@ interface Params {
 
 export function CarDetails() {
 
+  const scrollY = useSharedValue(0);
+
   const theme = useTheme();
   const navigation = useNavigation<any>();
   const route = useRoute();
+
   const { car } = route.params as Params;
 
-  function handleScheduling(){
+
+  const scrollHandler = useAnimatedScrollHandler(event => {
+    scrollY.value = event.contentOffset.y;
+  });
+
+  const headerStyleAnimation = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        scrollY.value,
+        [0, 200],
+        [200, 70],
+        Extrapolate.CLAMP
+      )
+    }
+  });
+
+  const sliderCarsStyleAnimation = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        scrollY.value,
+        [0, 150],
+        [1, 0],
+        Extrapolate.CLAMP
+      )
+    }
+  })
+
+  function handleScheduling() {
     navigation.navigate('Scheduling', {
       car
     });
@@ -48,23 +89,43 @@ export function CarDetails() {
 
   return (
     <Container>
-      <StatusBar 
+      <StatusBar
         barStyle='dark-content'
         backgroundColor={theme.colors.background_secondary}
         translucent
       />
-      <Header>
-        <BackButton
-          onPress={() => navigation.goBack()}
-        />
-      </Header>
+      <Animated.View
+        style={[
+          headerStyleAnimation, 
+          styles.header,
+          {backgroundColor: theme.colors.background_secondary}
+        ]}
+      >
+        <Header>
+          <BackButton
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+          />
+        </Header>
 
-      <CarImages>
-        <ImageSlider
-          imagesUrl={car.photos}
-        />
-      </CarImages>
-      <Content>
+        <Animated.View style={[sliderCarsStyleAnimation]}>
+          <CarImages>
+            <ImageSlider
+              imagesUrl={car.photos}
+            />
+          </CarImages>
+        </Animated.View>
+      </Animated.View>
+
+      <Animated.ScrollView
+        style={{
+          paddingHorizontal: 24,
+          paddingTop: getStatusBarHeight() + 160,
+        }}
+        showsVerticalScrollIndicator={false}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+      >
         <Details>
           <Description>
 
@@ -81,23 +142,46 @@ export function CarDetails() {
           {
             car.accessories.map((acessory) => (
               <Accessory
-                key={acessory.type} 
-                name={acessory.name} 
-                icon={getAccessoryIcon(acessory.type)}/>
+                key={acessory.type}
+                name={acessory.name}
+                icon={getAccessoryIcon(acessory.type)} />
             ))
           }
         </Accessories>
 
-        <About>{car.about}</About>
-      </Content>
+        <About>
+          {car.about}
+          {car.about}
+          {car.about}
+          {car.about}
+          {car.about}
+          {car.about}
+          {car.about}
+          {car.about}
+          {car.about}
+          {car.about}
+        </About>
+      </Animated.ScrollView>
 
       <Footer>
-        <Button 
+        <Button
           title='Escolher período do aluguel'
           onPress={handleScheduling}
         />
       </Footer>
-    
+
     </Container>
   );
 }
+
+
+const styles = StyleSheet.create({
+  header: {
+    position: 'absolute',
+    overflow: 'hidden',
+    zIndex: 1,
+  },
+  backButton: {
+    top: 50
+  }
+})
