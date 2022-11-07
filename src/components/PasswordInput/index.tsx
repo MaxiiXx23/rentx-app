@@ -14,13 +14,17 @@ import {
 
 interface Props extends TextInputProps {
     iconName: React.ComponentProps<typeof Feather>['name'];
+    value?: string;
 }
 
 export function PasswordInput({
     iconName,
+    value,
     ...rest
 }: Props) {
 
+    const [isFocused, setIsFocused] = useState(false);
+    const [isFilled, setIsFilled] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
     const theme = useTheme();
@@ -30,18 +34,33 @@ export function PasswordInput({
     }
 
 
+    function handleInputFocus() {
+        setIsFocused(true);
+    }
+
+    function handleInputBlur() {
+        setIsFocused(false);
+        setIsFilled(!!value); // com essa sintaxe eu torno o valor Lógico, ou seja, como se fosse um if e else;
+    }
+
+
     return (
         <Container>
-            <IconContainer>
+            <IconContainer
+                isFocused={isFocused}
+            >
                 <Feather
                     name={iconName}
                     size={24}
-                    color={theme.colors.text_detail}
+                    color={isFocused || isFilled ? theme.colors.main : theme.colors.text_detail}
                 />
             </IconContainer>
 
             <InputText
                 secureTextEntry={isPasswordVisible}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                isFocused={isFocused}
                 {...rest}
 
             />
@@ -49,7 +68,9 @@ export function PasswordInput({
             <BorderlessButton
                 onPress={handlePasswordVisibilityChange}
             >
-                <IconContainer>
+                <IconContainer
+                    isFocused={isFocused}
+                >
                     <Feather
                         name={isPasswordVisible ? 'eye' : 'eye-off'}
                         size={24}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInputProps } from 'react-native';
 
 import { Feather } from "@expo/vector-icons";
@@ -13,25 +13,46 @@ import {
 
 interface Props extends TextInputProps {
     iconName: React.ComponentProps<typeof Feather>['name'];
+    value?: string;
 }
 
 export function Input({
     iconName,
+    value,
     ...rest
 }: Props) {
 
-    const theme = useTheme()
+    const [isFocused, setIsFocused] = useState(false);
+    const [isFilled, setIsFilled] = useState(false);
+
+    const theme = useTheme();
+
+    function handleInputFocus() {
+        setIsFocused(true);
+    }
+
+    function handleInputBlur() {
+        setIsFocused(false);
+        setIsFilled(!!value); // com essa sintaxe eu torno o valor Lógico, ou seja, como se fosse um if e else;
+    }
 
     return (
         <Container>
-            <IconContainer>
+            <IconContainer
+                isFocused={isFocused}
+            >
                 <Feather
                     name={iconName}
                     size={24}
-                    color={theme.colors.text_detail}
+                    color={isFocused || isFilled ? theme.colors.main : theme.colors.text_detail}
                 />
             </IconContainer>
-            <InputText {...rest} />
+            <InputText
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                isFocused={isFocused}
+                {...rest}
+            />
         </Container>
     );
 }
