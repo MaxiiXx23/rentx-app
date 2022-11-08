@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import {
     StatusBar,
     KeyboardAvoidingView,
-    TouchableWithoutFeedback,
     Keyboard,
     Alert
 } from 'react-native';
 
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
 import * as Yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 
 import { useTheme } from 'styled-components';
 
@@ -30,6 +32,7 @@ export function SignIn() {
     const [password, setPassword] = useState('');
 
     const theme = useTheme();
+    const navigation = useNavigation<any>();
 
     async function handleSignIn() {
         try {
@@ -55,6 +58,10 @@ export function SignIn() {
 
         }
 
+    }
+
+    function handleNewAccount () {
+        navigation.navigate('SignUpFirstStep')
     }
 
 
@@ -111,8 +118,9 @@ export function SignIn() {
                         <Button
                             title='Criar conta gratuita'
                             color={theme.colors.background_secondary}
+                            onPress={handleNewAccount}
                             light
-                            enabled={false}
+                            enabled={true}
                             loading={false}
                         />
 

@@ -11,6 +11,8 @@ import { SchedulingComplete } from "../screens/SchedulingComplete";
 import { MyCars } from "../screens/MyCars";
 import { Splash } from "../screens/splash";
 import { SignIn } from "../screens/SignIn";
+import { SignUpFirstStep } from "../screens/SignUp/SignUpFirstStep";
+import { SignUpSecondStep } from "../screens/SignUp/SignUpSecondStep";
 
 
 export function StackRoutes() {
@@ -25,6 +27,15 @@ export function StackRoutes() {
             <Screen
                 name="SignIn"
                 component={SignIn}
+            />
+
+            <Screen
+                name="SignUpFirstStep"
+                component={SignUpFirstStep}
+            />
+            <Screen
+                name="SignUpSecondStep"
+                component={SignUpSecondStep}
             />
 
             <Screen

@@ -90,9 +90,6 @@ export function Home() {
     navigation.navigate('MyCars');
   }
 
-  function onBackPress (){
-    navigation.goBack();
-  }
 
   useFocusEffect(() => {
     fecthCars();
