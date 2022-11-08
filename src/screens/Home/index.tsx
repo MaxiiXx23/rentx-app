@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar, StyleSheet, BackHandler } from 'react-native';
 
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
@@ -91,14 +91,14 @@ export function Home() {
   }
 
 
-  useFocusEffect(() => {
+  useEffect(() => {
     fecthCars();
     const backHandler = BackHandler.addEventListener(
-        'hardwareBackPress',
-        () => true
+      'hardwareBackPress',
+      () => true
     );
     return () => backHandler.remove();
-});
+  }, []);
 
   return (
     <Container>

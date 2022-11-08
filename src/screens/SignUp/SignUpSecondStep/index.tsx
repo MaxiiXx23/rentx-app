@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native';
 
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import * as Yup from 'yup';
 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 
 import {
@@ -24,13 +26,60 @@ import { Bullet } from '../../../components/Bullet';
 import { PasswordInput } from '../../../components/PasswordInput';
 import { Button } from '../../../components/Button';
 
+
+interface Params {
+  user: {
+    name: string;
+    email: string;
+    driverLicense: string;
+  }
+}
+
 export function SignUpSecondStep() {
 
   const navigation = useNavigation<any>();
+  const route = useRoute();
   const theme = useTheme();
+
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+
+  const { user } = route.params as Params;
 
   function handleBack() {
     navigation.goBack();
+  }
+
+  async function handleRegister() {
+    try {
+      const schema = Yup.object().shape({
+        password: Yup.string()
+          .min(8, 'A senha deve conter no mínimo 8 caracteres.')
+          .max(16, 'A senha deve conter no máximo 16 caracteres.'),
+      })
+
+      await schema.validate({ password });
+
+      if (password !== passwordConfirm) {
+        return Alert.alert('As senha não são iguais.')
+      }
+
+      navigation.navigate('Confirmation', {
+        title: 'Conta criada!' ,
+        message: `Agora é só fazer login\n e aproveitar!` ,
+        nextScreenRoute: 'SignIn' ,
+      })
+
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        return Alert.alert('Opa!', error.message);
+      } else {
+        return Alert.alert(
+          'Opa! Ocorreu um erro inesperado.',
+          'Por favor, verifique sua conexão com a internet e tente novamente.'
+        );
+      }
+    }
   }
 
   return (
@@ -63,10 +112,14 @@ export function SignUpSecondStep() {
             <PasswordInput
               iconName='lock'
               placeholder='Senha'
+              onChangeText={setPassword}
+              value={password}
             />
             <PasswordInput
               iconName='lock'
               placeholder='Repetir senhas'
+              onChangeText={setPasswordConfirm}
+              value={passwordConfirm}
             />
 
           </Form>
@@ -74,6 +127,7 @@ export function SignUpSecondStep() {
           <Button
             title='Cadastrar'
             color={theme.colors.success}
+            onPress={handleRegister}
           />
 
         </Container>
