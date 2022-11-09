@@ -9,13 +9,9 @@ import { Scheduling } from "../screens/Scheduling";
 import { SchedulingDetails } from "../screens/SchedulingDetails";
 import { Confirmation } from "../screens/Confirmation";
 import { MyCars } from "../screens/MyCars";
-import { Splash } from "../screens/splash";
-import { SignIn } from "../screens/SignIn";
-import { SignUpFirstStep } from "../screens/SignUp/SignUpFirstStep";
-import { SignUpSecondStep } from "../screens/SignUp/SignUpSecondStep";
 
 
-export function StackRoutes() {
+export function AppStackRoutes() {
     return (
         <Navigator
             screenOptions={{
@@ -25,25 +21,8 @@ export function StackRoutes() {
         >
 
             <Screen
-                name="SignIn"
-                component={SignIn}
-            />
-
-            <Screen
-                name="SignUpFirstStep"
-                component={SignUpFirstStep}
-            />
-            <Screen
-                name="SignUpSecondStep"
-                component={SignUpSecondStep}
-            />
-
-            <Screen
                 name="Home"
                 component={Home}
-                options={{
-                    gestureEnabled: false
-                }}
             />
 
             <Screen
