@@ -7,6 +7,7 @@ import {
 
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import * as Yup from 'yup';
+import { api } from '../../../services/api';
 
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
@@ -25,6 +26,7 @@ import { BackButton } from '../../../components/BackButton';
 import { Bullet } from '../../../components/Bullet';
 import { PasswordInput } from '../../../components/PasswordInput';
 import { Button } from '../../../components/Button';
+
 
 
 interface Params {
@@ -64,10 +66,23 @@ export function SignUpSecondStep() {
         return Alert.alert('As senha não são iguais.')
       }
 
-      navigation.navigate('Confirmation', {
-        title: 'Conta criada!' ,
-        message: `Agora é só fazer login\n e aproveitar!` ,
-        nextScreenRoute: 'SignIn' ,
+      await api.post('/users', {
+        name: user.name,
+        email: user.email,
+        password,
+        driver_license: user.driverLicense
+      }).then(() => {
+        navigation.navigate('Confirmation', {
+          title: 'Conta criada!' ,
+          message: `Agora é só fazer login\n e aproveitar!` ,
+          nextScreenRoute: 'SignIn' ,
+        });
+      })
+      .catch((error) => {
+        return Alert.alert(
+          'Opa! Não foi possível cadastrar.',
+          'Por favor, verifique sua conexão com a internet e tente novamente.'
+        )
       })
 
     } catch (error) {

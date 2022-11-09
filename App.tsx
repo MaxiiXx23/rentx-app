@@ -1,6 +1,7 @@
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AppLoading from 'expo-app-loading';
+
 import {
   useFonts,
   Inter_400Regular,
@@ -13,6 +14,7 @@ import {
 } from '@expo-google-fonts/archivo';
 
 import { ThemeProvider } from "styled-components";
+import { AppProvider } from "./src/hooks";
 
 
 
@@ -39,8 +41,10 @@ export function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <GestureHandlerRootView style={{flex: 1}}>
-        <Routes />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AppProvider>
+          <Routes />
+        </AppProvider>
       </GestureHandlerRootView>
 
     </ThemeProvider>
