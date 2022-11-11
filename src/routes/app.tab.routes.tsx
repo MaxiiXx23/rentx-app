@@ -14,6 +14,7 @@ import PeopleSvg from '../assets/people.svg';
 
 import { Home } from "../screens/Home";
 import { MyCars } from "../screens/MyCars";
+import { Profile } from "../screens/Profile";
 
 
 
@@ -68,7 +69,7 @@ export function AppTabRoutes() {
 
             <Screen
                 name="Profile"
-                component={Home}
+                component={Profile}
                 options={{
                     tabBarIcon: ({ color }) => {
                         return <PeopleSvg
@@ -76,7 +77,8 @@ export function AppTabRoutes() {
                             height={24}
                             fill={color}
                         />
-                    }
+                    },
+                    tabBarHideOnKeyboard: true
                 }}
             />
 

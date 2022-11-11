@@ -29,6 +29,7 @@ interface SignInCredentials {
 interface AuthContextData {
     user: User;
     signIn: (credentials: SignInCredentials) => Promise<void>;
+    signOut: () => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -53,19 +54,21 @@ function AuthProvider({ children }: AuthProviderProps) {
             // aqui eu seto em todas as requisões o token de autorização no header.
             api.defaults.headers.authorization = `Bearer ${token}`;
 
-            await database.write( async () => {
+            await database.write(async () => {
                 const usersCollection = database.get<UserModel>('users');
-                await usersCollection.create((newUser) => {
-                    newUser.user_id = user.id,
+                const responseUser = await usersCollection.create((newUser) => {
+                        newUser.user_id = user.id,
                         newUser.name = user.name,
                         newUser.email = user.email,
                         newUser.driver_license = user.driver_license,
                         newUser.avatar = user.avatar,
                         newUser.token = token
                 })
-            })
+                
+                const dataUser = responseUser._raw as unknown as User;
 
-            setData({ ...user, token });
+                setData({ ...dataUser, token });
+            })
 
         } catch (error) {
 
@@ -75,12 +78,29 @@ function AuthProvider({ children }: AuthProviderProps) {
 
     }
 
+    async function signOut() {
+
+        try {
+            await database.write(async () => {
+                const usersCollection = database.get<UserModel>('users');
+                const userSelected = await usersCollection.find(data.id);
+                await userSelected.destroyPermanently();
+            })
+            api.defaults.headers.authorization = ``;
+            setData({} as User);
+
+        } catch (error) {
+            throw new Error(error);
+        }
+
+    }
+
     useEffect(() => {
-        async function loadData (){
+        async function loadData() {
             const usersCollection = database.get<UserModel>('users');
             const response = await usersCollection.query().fetch();
 
-            if(response.length > 0){
+            if (response.length > 0) {
                 const usersData = response[0]._raw as unknown as User;
                 api.defaults.headers.authorization = `Bearer ${usersData.token}`;
                 setData(usersData);
@@ -89,13 +109,14 @@ function AuthProvider({ children }: AuthProviderProps) {
 
         loadData();
 
-    },[])
+    }, [])
 
     return (
         <AuthContext.Provider
             value={{
                 user: data,
-                signIn
+                signIn,
+                signOut,
             }}
         >
             {children}
