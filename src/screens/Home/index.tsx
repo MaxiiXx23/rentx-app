@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StatusBar, StyleSheet, BackHandler } from 'react-native';
+import { StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from 'styled-components';
+
 import { RFValue } from 'react-native-responsive-fontsize';
 
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  useAnimatedGestureHandler,
-  withSpring
-} from 'react-native-reanimated';
 
 import { api } from '../../services/api';
 import { CarDTO } from '../../dtos/CarDTO';
@@ -34,29 +28,35 @@ export function Home() {
   const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const positionY = useSharedValue(0);
-  const positionX = useSharedValue(0);
-  const startingPosition = 0;
-  const myCarsButtonStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: positionX.value },
-        { translateY: positionY.value }
-      ]
-    }
-  });
-
-
   const navigation = useNavigation<any>();
 
   async function fecthCars() {
+    // aqui set true para indicar que a interface já foi montada e que posso atualizar o estado.
+    let isMounted = true;
+
     try {
       const response = await api.get('/cars');
-      setCars(response.data);
+      // aqui verifico se isMounted realmente foi montada para REALMENTE 
+      // haja atualização do estado após a promise ter sido concluída.
+
+      if (isMounted) {
+        setCars(response.data);
+      }
+
     } catch (error) {
       console.log(error)
     } finally {
-      setLoading(false);
+      // aqui verifico se isMounted realmente foi montada para REALMENTE 
+      // haja atualização do estado após a promise ter sido concluída.
+
+      if (isMounted) {
+        setLoading(false);
+      }
+    }
+
+    // função de 'limpeza' que é uma forma de garantir a atualização correta dos estados ao utilizar promises.
+    return () => {
+      isMounted = false;
     }
   }
 
