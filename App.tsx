@@ -1,4 +1,5 @@
 import React from "react";
+import { LogBox } from 'react-native';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AppLoading from 'expo-app-loading';
 
@@ -21,6 +22,11 @@ import { AppProvider } from "./src/hooks";
 import { Routes } from "./src/routes";
 
 import theme from "./src/styles/theme";
+
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state'
+]);
 
 
 export function App() {
