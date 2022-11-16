@@ -11,7 +11,6 @@ interface OptionProps {
 
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.colors.background_secondary};
-
 `;
 
 export const Header = styled.View`
@@ -65,7 +64,7 @@ export const PhotoButton = styled(RectButton)`
   right: 10px
 `;
 
-export const Content = styled.View`
+export const Content = styled(View)`
   padding: 0 24px;
   margin-top: 122px;
 `;
@@ -105,6 +104,10 @@ export const OptionTitle = styled(Text) <OptionProps>`
 `;
 
 export const Section = styled.View`
+  
+`;
 
+export const ButtonWrapper = styled.View`
+  padding: 16px 0px 66px 0px;
 `;
 
