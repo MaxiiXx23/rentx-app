@@ -5,14 +5,16 @@ import { useAuth } from "../hooks/auth";
 
 import { AuthRoutes } from "./auth.routes";
 import { AppTabRoutes } from "./app.tab.routes";
+import { LoadAnimated } from "../components/LoadAnimated";
 
 export function Routes() {
 
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
 
     return (
-        <NavigationContainer>
-            {user.id ? <AppTabRoutes /> : <AuthRoutes />}
-        </NavigationContainer>
+        loading ? <LoadAnimated /> :
+            <NavigationContainer>
+                {user.id ? <AppTabRoutes /> : <AuthRoutes />}
+            </NavigationContainer>
     )
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
   KeyboardAvoidingView,
   Keyboard,
@@ -9,6 +10,7 @@ import {
 import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
@@ -44,6 +46,7 @@ type options = 'dataEdit' | 'passwordEdit';
 
 export function Profile() {
   const { user, signOut, updateUser } = useAuth();
+  const netInfo = useNetInfo();
 
   const [option, setOption] = useState<options>('dataEdit');
   const [avatar, setAvatar] = useState(user.avatar);
@@ -78,7 +81,11 @@ export function Profile() {
   }
 
   function handleOptionChange(optionSelected: options) {
-    setOption(optionSelected);
+    if(netInfo.isConnected === false && optionSelected === 'passwordEdit'){
+      Alert.alert('Você está offline!', 'Para mudar a senha, conecte-se a Internet.');
+    }else {
+      setOption(optionSelected);
+    }
   }
 
   async function handleAvatarSelect() {

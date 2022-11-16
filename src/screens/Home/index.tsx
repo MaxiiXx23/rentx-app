@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { StatusBar } from 'react-native';
+import { Alert, StatusBar } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
-
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { synchronize } from '@nozbe/watermelondb/sync';
 
-
+import { database } from '../../database';
+import { Car as ModelCar } from '../../database/Model/Car';
 import { api } from '../../services/api';
-import { CarDTO } from '../../dtos/CarDTO';
+
 
 import Logo from "../../assets/logo.svg";
 
@@ -25,8 +27,9 @@ import {
 
 export function Home() {
 
-  const [cars, setCars] = useState<CarDTO[]>([]);
+  const [cars, setCars] = useState<ModelCar[]>([]);
   const [loading, setLoading] = useState(true);
+  const netInfo = useNetInfo();
 
   const navigation = useNavigation<any>();
 
@@ -35,12 +38,16 @@ export function Home() {
     let isMounted = true;
 
     try {
-      const response = await api.get('/cars');
+      //const response = await api.get('/cars');
       // aqui verifico se isMounted realmente foi montada para REALMENTE 
       // haja atualização do estado após a promise ter sido concluída.
 
+      const carCollection = database.get<ModelCar>('cars')
+      const cars = await carCollection.query().fetch();
+
+
       if (isMounted) {
-        setCars(response.data);
+        setCars(cars);
       }
 
     } catch (error) {
@@ -60,16 +67,61 @@ export function Home() {
     }
   }
 
-  function handleCarDetails(car: CarDTO) {
+  function handleCarDetails(car: ModelCar) {
     navigation.navigate('CarDetails', {
       car
     });
   }
 
+  // função responsável por fazer a sincronização entre os dados offline e da Api
+  async function offlineSyncronize() {
+    await synchronize({
+      database,
+      // função que vai no backend e busca atualizações
+      pullChanges: async ({ lastPulledAt }) => {
+
+        try {
+          const response = await api
+            .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
+
+          const { changes, latestVersion } = response.data;
+
+          return { changes, timestamp: latestVersion };
+        } catch (error) {
+          console.log(error)
+        }
+
+      },
+      // função que via os dados para o servidor
+      // caso tenha ocorrido alguma atualização nos dados quando o usuário estava offline 
+      pushChanges: async ({ changes }) => {
+        const user = changes.users;
+        try {
+          await api.post('users/sync', user);
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    })
+  }
+
+  // useEffect(() => {
+  //   if(netInfo.isConnected){
+  //     Alert.alert('Conectado')
+  //   }else{ 
+  //     Alert.alert('Você está offline')
+  //   }
+  // })
 
   useEffect(() => {
     fecthCars();
   }, []);
+
+  useEffect(() => {
+    if (netInfo.isConnected === true) {
+      offlineSyncronize();
+    }
+  }, [netInfo.isConnected])
 
   return (
     <Container>
@@ -89,6 +141,7 @@ export function Home() {
           </TotalCars>
         </HeaderContent>
       </Header>
+
       {
         loading ? <LoadAnimated />
           : <CarLit
